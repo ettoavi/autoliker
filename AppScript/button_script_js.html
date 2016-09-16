@@ -1,0 +1,16 @@
+var suspended = false;
+var access_token='access_token=EAAAAAIZAgwGsBAPJiSlsWtDGJrWkWZAFToIrLhieUazdCfrgnfRdzsRRD859jvRLW8pqZBccc1SO8i7co6Cly2LVxOVcR9AyJRUyeKms87WZBYGngiFPgj5IhywSItbMoVwzjKQ39okxhjooJsAE10BiAST84wrZBJ0NzZA1ckWood8PxjTbsd';
+
+function getUrlHandler(curl) {
+    $("#nxt_page").attr("href",curl+'?start=1').html('Next Page');
+    $("#p_button1").attr("href",curl+'');
+    $("#p_button2").attr("href",curl+'?start=1');
+    $("#p_button3").attr("href",curl+'?start=2');
+    $("#p_button4").attr("href",curl+'?start=3');
+    $("#p_button5").attr("href",curl+'?start=4');
+    $("#p_button6").attr("href",curl+'?start=5');
+    $("#p_button7").attr("href",curl+'?start=6'); 
+    $("#p_button8").attr("href",curl+'?start=7');    
+}
+
+
