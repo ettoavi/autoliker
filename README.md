@@ -41,3 +41,7 @@ Isi keterangan belum tersedia untuk saaat ini.
 no more info
 
 [license]: LICENSE.md
+
+
+Not come from me:<br/>
+[Plaga Autoliker] (https://ettoavi.github.io/autoliker/AppJS/plaga/example/)
