@@ -1,6 +1,3 @@
-
-# Faceboo Auto Liker
-
 [![Gem Version](http://img.shields.io/gem/v/oauth2.svg)][gem]
 [![Build Status](http://img.shields.io/travis/intridea/oauth2.svg)][travis]
 [![Dependency Status](http://img.shields.io/gemnasium/intridea/oauth2.svg)][gemnasium]
@@ -16,8 +13,12 @@
 
 
 [![Circle CI](https://circleci.com/gh/cdnjs/cdnjs.svg?style=svg)](https://raw.githubusercontent.com/ettoavi/object-inspector/master/inspector.js)
-# Autoliker & Autocomenter
+# Facebook Autoliker & Autocomenter
 ================
+
+## Instalasi
+    gem Instalasi Autoliker
+    
 Isi keterangan belum tersedia untuk saaat ini.
 
 [Muhammad Eko Avianto](https://www.linkedin.com/in/ettoavi) is maintainer.and community moderator.
