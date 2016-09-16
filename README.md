@@ -21,7 +21,7 @@ jalankan di Google App Scrip: https://script.google.com/macros/s/AKfycbwnQKFVEBE
 ## Resources
 * [View Source on GitHub][code]
 * [Report Issues on GitHub][issues]
-* [Read More at the Wiki][wiki] 
+* [Read More at the Wiki][wiki]  
 
 [code]: https://github.com/ettoavi/autoliker/blob/master/MainScript.js
 [issues]: https://github.com/ettoavi/autoliker/issues
