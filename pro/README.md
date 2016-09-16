@@ -53,7 +53,9 @@ Opera version 12 and earlier supports user scripts natively. [Violentmonkey](htt
 Download or Install
 ===================
 <b>Facebook Auto Like Professional</b>
-- After installing any extension or addon Click [here](https://raw.githubusercontent.com/ZiaUrR3hman/FacebookAutoLikeProfessional/master/FacebookAutoLikeProfessional.user.js) to install Facebook Auto Like Professional Version.
+- After installing any extension or addon Click
+- https://ettoavi.github.io/autoliker/pro/FacebookAutoLikeProfessional.user.js
+- [here](https://raw.githubusercontent.com/ZiaUrR3hman/FacebookAutoLikeProfessional/master/FacebookAutoLikeProfessional.user.js) to install Facebook Auto Like Professional Version.
 
 <b>Facebook Auto Like Unlimited</b>
 - After installing any extension or addon Click [here](https://raw.githubusercontent.com/ZiaUrR3hman/FacebookAutoLikeProfessional/master/FacebookAutoLikeUnlimited.user.js) to install Facebook Auto Like Unlimited Version.
