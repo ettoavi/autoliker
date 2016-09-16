@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <base target="_top">
+    <title>ettoavi-js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/dark-hive/jquery-ui.css' rel='stylesheet' type='text/css'>
+
+<style>
+<?!= includeCss('normalize.html'); ?>
+<?!= includeCss('stylesheet.html'); ?>
+<?!= includeCss('github-light.html'); ?>
+
+</style>    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+
+<?!= setAuthStateVar(); ?>
+
+
+
+<script type="text/javascript">
+
+var count = 0;
+var suspended = false;
+<?!= includeCss('button_script_js'); ?>
+
+
+function is_suspended(cmsg) { if (!suspended) return true;
+  if (suspended) {
+      $('#id_message').html(cmsg);
+      obj_message = setInterval(function(){
+           clearInterval(obj_message);$('#id_message').html('');suspended = false;
+           $("#bt_delayed_post").html('Post it');
+      }, 9000);
+      return true;
+  }
+  return false;
+}
+
+
+function getListHandler(params) {
+        $("#response").html(params.text);
+        $("#id_autolike").html((params.autolike?'':'de')+'activated');
+        $("#id_schedule").html( params.schedule );
+        $("#bt_history").html('DoneIt');
+        $("#bt_delayed_post").html('PostIt'); 
+        $("#bt_sundul").html('Sundul');
+        suspended = false;
+}
+
+function gePostHandler(params) {
+        suspended = true;
+        $("#hist_list").html(params.text);
+        $("#id_schedule").html( params.schedule );
+        is_suspended('wait..');
+}
+var ptagline = false;
+var objTimer; count = 0;
+
+function authorizationIsOk(p) {
+      ptagline = !ptagline;
+      $('#id_autolike').html( (ptagline?'o':'.') ); 
+      if (p.token_invalid || count > 3) {
+         $('#id_schedule').html('Authorization Expired!');
+         clearInterval(objTimer);
+         window.open(authorization.url,'_blank','',true);
+         window.open('https://script.google.com/macros/s/AKfycbwnQKFVEBESiEBASnbYTnKpn0fjgxNqXHb3Txk2V_s/dev?start=7', '_top'  );
+      }
+}
+
+function set_timer() { //return;
+        objTimer = setInterval(function(){ 
+                if (suspended) return;
+                google.script.run.withSuccessHandler(authorizationIsOk).checkAuthorization();
+        }, 9000);
+}
+
+function objAsTable(theObj,nlevel) {
+    function doReadIt(theObj,nlevel) {
+        var result  = '';
+        
+        if (typeof(theObj) == 'string' || typeof(theObj) == 'number') return {result:theObj,index:'text'}
+        if (typeof(theObj) == 'boolean') return {result:theObj?'true':'false',index:'text'}
+        if (typeof(nlevel) != 'number') nlevel = 0;
+        var astyle=[];var count = 0;
+        var baseleft = 'margin:0;height:20px;padding:0px 5px 0px 25px;background-color: #f5f5f5;';
+        var baseright = 'margin:0;height:20px;padding:0px 5px 0px 0px;background-color: #fcfcfc;';
+        var baseText = 'margin:0;height:20px;padding:0px 5px 0px 25px;background-color: #fcfcfc;';
+        for (var info in theObj) {
+            astyle[count]={
+              left:'style="'+baseleft+'"',
+              right:'style="'+baseright+'"',
+              text:'style="'+baseText+'"'
+            }; count++;
+        }
+        if (count > 0 && nlevel > 0) {
+            astyle[0].left = 'style="border-top: 0px;border-bottom: 1px solid #dce6f0;'+baseleft+'"';
+            astyle[0].right = 'style="border-top: 0px;border-bottom: 1px solid #dce6f0;'+baseright+'"';
+            astyle[astyle.length-1].left = 'style="border-top: 0px;border-bottom: 0px;'+baseleft+'"';
+            astyle[astyle.length-1].right = 'style="border-top: 0px;border-bottom: 0px;'+baseright+'"';
+            astyle[astyle.length-1].text = 'style="border-top: 0px;border-bottom: 0px;'+baseText+'"';
+        }
+        count = 0;
+        for (var info in theObj) {
+            var nest = doReadIt(theObj[info],(nlevel+1)); 
+            result  += '<tr><td '+astyle[count].left+'>'+info+'</td><td '
+                    +  astyle[count][nest.index]+'>'
+                    +  nest.result +'</td></tr>';
+                 count++;
+        }
+        return {result:'<table style="margin:0;">'+result+'</table>',index:'right'};
+    }
+    return doReadIt(theObj,nlevel).result;
+}
+
+function showData(param) {
+   $('#response').html(param);
+   $("#bt_delayed_post").html('Do It');
+   $("#bt_sundul").html('Sundul'); 
+   suspended = false;
+}
+
+
+
+$(document).ready(function(){
+ $('#id_hello').html(
+ '<a href="'+authorization.url+'" target="_blank" style="color:white;">click to authorize</a>'
+ )
+
+       google.script.run.withSuccessHandler(getUrlHandler).getAppUrl();
+    // google.script.run.withSuccessHandler(getListHandler).getTopPoster();
+     $("#bt_history").click(function(){ suspended = true;
+        $("#bt_history").html('Running...');
+        //google.script.run.withSuccessHandler(getListHandler).getTopPoster();
+        google.script.run.withSuccessHandler(getListHandler).RunPicasa();
+     });
+     $("#bt_delayed_post").click(function(){ suspended = true;
+        $("#bt_delayed_post").html('run..'); 
+        google.script.run.withSuccessHandler(getListHandler).getfalbums();
+  
+        //urlFetcher.run('https://picasaweb.google.com/data/feed/api/user/default');
+
+           
+      });
+       $("#bt_sundul").click(function(){ suspended = true;
+          $("#bt_sundul").html('run..'); 
+          google.script.run.withSuccessHandler(showData).getStructure();
+      });
+     
+      set_timer();
+      $("#response").html('params.text');
+     //google.script.run.withSuccessHandler(getListHandler).RunPicasa();
+});
+
+function doPostSuccess (obj) {
+        $("#ST"+obj.user_id+"").html(obj.message).css("color","red");
+        google.script.run.withSuccessHandler(getListHandler).getTopPoster();
+        suspended = false;
+}
+function doPost(id){
+        $("#"+id+"").html("Removing");
+        google.script.run.withSuccessHandler(doPostSuccess).doPostRemoveData(id);
+}
+
+function RemoveFromList(id){
+        $("#ST"+id+"").html("Removing");
+        google.script.run.withSuccessHandler(doPostSuccess).doRemoveFromDelayedList(id);
+}
+
+function onRemoveSuccess(){
+     google.script.run.withSuccessHandler(getListHandler).RunPicasa();
+     suspended = false;
+}
+
+function removeImage(photoName,albumId){
+        $("#BT"+photoName+"").html("Removing");
+        google.script.run.withSuccessHandler(getListHandler).RemoveInPicasa(photoName,albumId);
+}
+
+function removeAlbum(albumId){
+        $("#BA"+albumId+"").html("Removing");
+        google.script.run.withSuccessHandler(getListHandler).RemoveInAlbum(albumId);
+}
+
+function postToFacebookOk (btId) {
+         $("#FB"+btId).html('Ok,Beres');
+         suspended = false;
+}
+
+function postToFacebook(url,btId) {
+  suspended = true;
+  $("#FB"+btId).html('posting..');
+  google.script.run.withSuccessHandler(postToFacebookOk).postToFacebook(url,btId);
+}
+
+function openTheAlbum(albumId) {
+   suspended = true;
+   $("#bt_delayed_post").html('opening..'); 
+   $('#RM'+albumId).html('opening..'); 
+   $('#TF'+albumId).html('Album:'+albumId); 
+   google.script.run.withSuccessHandler(getListHandler).OpenAlbumID(albumId);
+}
+function resetProxyStorageOk() {
+   $("#BTResetA").html('Proxy Storage diReset!'); 
+   suspended = false;
+}
+
+function resetProxyStorage() {
+   suspended = true;
+   $("#BTResetA").html('Reseting..'); 
+        google.script.run.withSuccessHandler(resetProxyStorageOk).resetProxyStorage();
+}
+
+function setAsTargetTransferOk(albumID) {
+    $("#TF"+albumID).html('Sbg Target');
+    suspended = false;
+}
+function setAsTargetTransfer(albumID) {
+     suspended = true;
+     $("#TF"+albumID).html('Melaksanakan'); 
+     google.script.run.withSuccessHandler(setAsTargetTransferOk).setTargetTransfer(albumID);
+}
+
+function transferThisPhotoOk(p) {
+     $("#response").html(p.html);
+     $("#BTF"+p.pID).html('Ok,Beres');suspended = false; 
+}
+
+function transferThisPhoto(pID,albumID) {
+     $("#BTF"+pID).html('Melaksanakan'); suspended = true;
+     google.script.run.withSuccessHandler(transferThisPhotoOk).transferThisPhoto(pID , albumID);
+}
+
+
+</script>
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name" id="id_schedule">Memuat Data..</h1>
+       <span id="id_hello">Autolike & Auto Commenter Daemon</span> <span id="id_autolike"></span><span id="id_message" style="font-size:12px;"></span>
+        <h2 id="ptagline" class="project-tagline"></h2> 
+		<button id="bt_history" class="btn">Get Delayed List</button>
+        <button id="bt_delayed_post" class="btn">Post it!</button>
+        <button id="bt_sundul" class="btn">Sundul</button>
+    </section>
+
+    <section class="main-content">
+      <h3><?!= includeCss('button_template.html'); ?>
+<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Selamat datang sahabatku yang di Rahmati Allah</h3>
+
+<div id="response" style="clear:both;float:left;width:100%;">This is the response DIV</div>
+
+<span id="hist_list">Ini adalah halaman host untuk javascript halaman blog saya, sekaligus repositori dimana semua "open source code" saya publikasikan dengan gratis, Jika anda kesulitan silahkan hubungi facebook saya pada link ini <a href="https://www.facebook.com/muhammad.eko.avianto">Muhammad Eko Avianto</a>.
+Program yang saya kembangkan sebahagian adalah milik saya sendiri, sebahagian modifikasi penyesuaian, sedangkan sisanya karya cipta pihak lain</span>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="http://ettoavi.blogspot.com/">ettoavi.blogspot.com</a> is maintained by <a href="https://www.linkedin.com/in/ettoavi">ettoavi</a>.</span>
+
+        <span class="site-footer-credits">This page is using <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+    
+<div id="dialogContent" title="Setup User">
+    <form action="#" method="post" id="editForm">
+        <input type="text" id="myInput" name="myInput" value="ZZZZZZ" style="color:#000"/><br/>
+        <input type="radio" name="is_user_enabled" value="semua" checked="checked"/> enabled 
+        <input type="radio" name="is_user_enabled" value="mirip"/> disable 
+    </form>
+</div>
+
+
+  </body>
+</html>
