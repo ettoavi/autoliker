@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ettoavi-js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<style>
+<?!= includeCss('normalize.html'); ?>
+<?!= includeCss('stylesheet.html'); ?>
+<?!= includeCss('github-light.html'); ?>
+
+</style>    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+var count = 0; var timerStop = false;
+var suspended = false;
+var objTimer = 0;
+
+var gUrl='';
+<?!= includeCss('button_script_js'); ?>
+
+function doSuccessHandler(params) {
+     $("#bt_post").html(params.enabled?'Update FB (on)':'Update FB (off)');
+     $("#bt_like").html(params.like?'Like (on)':'Like (off)');
+     $("#bt_comment").html(params.comment?'Coment (on)':'Coment (off)');
+     $("#bt_exec").html("Execute");
+     $("#c_info").html(params.text);
+     //if(typeof(params.schedule)=='string') 
+     $("#id_schedule").html( params.schedule );
+     $("#id_autolike").html((params.autolike?'':'de')+'activated');
+     if (params.stopTimer ) timerStop = true;   
+
+     suspended = false;
+}
+
+function doClick(){
+   if (is_suspended('-wait until Running-')) return;
+    suspended = true;
+    count = 0;$("#bt_exec").html("Running");
+    google.script.run.withSuccessHandler(doSuccessHandler).doSomething();
+}
+
+function doClear(){
+  alert('Want to Clear?'); return false;
+  if (is_suspended('-wait until Running-')) return;
+  suspended = true;
+  count = 0; $("#c_info").html("<code>Clearing Data...</code>");
+  google.script.run.withSuccessHandler(doSuccessHandler).doClearHistory(0);
+  return false;
+}
+function clear_timer() {
+  clearInterval(objTimer);
+}
+function set_timer() { return;
+  objTimer = setInterval(function(){ 
+      if (timerStop||suspended) return; 
+        if(++count > 500) {count = 0;}
+        google.script.run.withSuccessHandler(doSuccessHandler).doReadHistory(true,count);
+   }, 9000);
+}
+var count_message = 0;
+function is_suspended(cmsg) { if (count_message > 0 && !suspended) return true;
+  if (suspended && count_message == 0) {
+      count_message += 1;
+      $('#id_message').html(cmsg);
+      obj_message = setInterval(function(){
+           clearInterval(obj_message);count_message -= 1;$('#id_message').html('');
+      }, 2000);
+      return true;
+  }
+  suspended = true;
+  return false;
+}
+
+function update_button_state(postState,likeState,cmtState){
+      doSuccessHandler({"text":'<code>set new state..</code>',"enabled":postState,"like":likeState,"comment":cmtState}); 
+      google.script.run.withSuccessHandler(doSuccessHandler).setLikeEnabled(postState,likeState,cmtState);
+}
+function SundulHandler(s){
+     suspended = true;
+     $("#bt_sundul").html('Test Sundul');
+     
+     doSuccessHandler(s);
+}
+
+$(document).ready(function(){
+    $("#bt_post").click(function(){
+      if (is_suspended('-wait until done-')) return;
+      var s1 = $("#bt_post").text().toLowerCase();
+      var s2 = $("#bt_like").text().toLowerCase();
+      var s3 = $("#bt_comment").text().toLowerCase();
+      var postState = (s1=='update fb (on)'?false:true);
+      var likeState = (s2=='like (on)'?true:false);
+      var cmtState = (s3=='coment (on)'?true:false);
+      update_button_state(postState,likeState,cmtState)
+     });
+    $("#bt_like").click(function(){
+      if (is_suspended('-wait until done-')) return;
+      var s1 = $("#bt_post").text().toLowerCase();
+      var s2 = $("#bt_like").text().toLowerCase();
+      var s3 = $("#bt_comment").text().toLowerCase();
+      var postState = (s1=='update fb (on)'?true:false);
+      var likeState = (s2=='like (on)'?false:true);
+      var cmtState = (s3=='coment (on)'?true:false);
+      update_button_state(postState,likeState,cmtState)
+     });
+    $("#bt_comment").click(function(){
+      if (is_suspended('-wait until done-')) return;
+      var s1 = $("#bt_post").text().toLowerCase();
+      var s2 = $("#bt_like").text().toLowerCase();
+      var s3 = $("#bt_comment").text().toLowerCase();
+      var postState = (s1=='update fb (on)'?true:false);
+      var likeState = (s2=='like (on)'?true:false);
+      var cmtState = (s3=='coment (on)'?false:true);
+      update_button_state(postState,likeState,cmtState)
+     });
+    $("#bt_trigger").click(function(){
+      if (is_suspended('-wait until done-')) return;
+      suspended=false;
+      var s = $("#bt_trigger").text()=='De-Activate'?'Activate':'De-Activate';
+      $("#bt_trigger").html(s);
+      //var activeState = (s=='De-Activate'?true:false);
+      //update_button_state(postState,likeState,cmtState)
+     });
+    $("#bt_sundul").click(function(){
+      if (is_suspended('-wait until done-')) return;
+      $("#bt_sundul").html('Menyundul');
+      google.script.run.withSuccessHandler(SundulHandler).doSundulStatus();
+     });
+     google.script.run.withSuccessHandler(getUrlHandler).getAppUrl(); 
+     google.script.run.withSuccessHandler(doSuccessHandler).doReadHistory(true,0);
+     set_timer();
+});
+
+function doPostSuccess (status) {
+    $("#S"+status).html('');
+    suspended=false;
+}
+function doPost(a,b){
+    if (is_suspended('-wait until done-')) return;
+     $("#S"+a).html('Posting...<br/>');
+     google.script.run.withSuccessHandler(doPostSuccess).doPostData(a,b);
+}
+
+</script>
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name"><span id="id_schedule">A</span>&nbsp;</h1>
+      Autolike & Auto Commenter Daemon <span id="id_autolike"></span><span id="id_message" style="font-size:12px;"></span>
+      <h2 class="project-tagline"></h2> 
+		<button id="bt_exec" onclick="doClick()" class="btn">Execute</button>
+        <button onclick="doClear()" class="btn">Clear History</button>
+        <button id="bt_post" class="btn">Update FB (on)</button>
+        <button id="bt_like" class="btn">Like (on)</button>
+        <button id="bt_comment" class="btn">Coment (on)</button>
+        <button id="bt_trigger" class="btn">De-Activate</button>
+        <button id="bt_sundul" class="btn">Test Sundul</button>
+         <a id="nxt_page" href="" target="_top" class="btn">Next Page</a>
+    </section>
+
+    <section class="main-content">
+    
+      <h3><?!= includeCss('button_template.html'); ?>
+<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Selamat datang sahabatku yang di Rahmati Allah</h3>
+
+
+<p id="c_info">Ini adalah halaman host untuk javascript halaman blog saya, sekaligus repositori dimana semua "open source code" saya publikasikan dengan gratis, Jika anda kesulitan silahkan hubungi facebook saya pada link ini <a href="https://www.facebook.com/muhammad.eko.avianto">Muhammad Eko Avianto</a>.
+Program yang saya kembangkan sebahagian adalah milik saya sendiri, sebahagian modifikasi penyesuaian, sedangkan sisanya karya cipta pihak lain</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="http://ettoavi.blogspot.com/">ettoavi.blogspot.com</a> is maintained by <a href="https://www.linkedin.com/in/ettoavi">ettoavi</a>.</span>
+
+        <span class="site-footer-credits">This page is using <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
