@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ettoavi-js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<style>
+<?!= includeCss('normalize.html'); ?>
+<?!= includeCss('stylesheet.html'); ?>
+<?!= includeCss('github-light.html'); ?>
+
+</style>    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<?!= setAuthStateVar(); ?>
+<script type="text/javascript">
+var count = 0;
+var suspended = false;
+<?!= includeCss('button_script_js'); ?>
+
+
+function searchHandler(params) {
+        suspended = true;
+        $("#id_result").html(params.text);
+        $("#bt_search").html('Update');
+}
+
+$(document).ready(function(){
+     google.script.run.withSuccessHandler(getUrlHandler).getAppUrl();
+     $("#bt_search").click(function(){
+        $("#bt_search").html('Searching');
+        event.preventDefault();
+        google.script.run.withSuccessHandler(searchHandler).searchUserName($("#fname").val(),$('input[name=opt_search]:checked').val());
+     });     
+     return true;
+});
+
+
+function doPostSuccess (status) {
+    function delayed_acces(){
+        $("#S"+status).html('Suksess..');
+        var timer_id = setInterval(function(){
+            clearInterval(timer_id );
+            $("#S"+status).html('');
+        }, 800);
+    }  
+    $("#S"+status).html('Posting..'+status);
+   suspended=false;
+   delayed_acces();
+}
+
+function doPost(a,b){
+     suspended=true;
+     $("#S"+a).html('Posting...<br/>');
+     google.script.run.withSuccessHandler(doPostSuccess).doPostData(a,b);
+}
+
+</script>
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Utilities</h1>
+      <span id="id_message" style="font-size:12px;"></span>
+      <h2 class="project-tagline"></h2> 
+		<button id="bt_history"  class="btn">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        <button id="bt_delayed_post" class="btn">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+         <a id="nxt_page" href="" target="_top" class="btn">Next Page</a>
+    </section>
+
+    <section class="main-content">
+      <h3><?!= includeCss('button_template.html'); ?>
+<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Selamat datang sahabatku yang di Rahmati Allah</h3>
+
+<form method=post target="_self">
+Kriteria pencarian : 
+  <input type="radio" name="opt_search" value="semua" checked="checked"> semua 
+  <input type="radio" name="opt_search" value="mirip"> mirip 
+  <input type="radio" name="opt_search" value="tepat"> tepat <br/>
+
+First name: <input style="width:42em;" id="fname" type="text" name="FirstName" value="User Name">
+<button id="bt_search">update</button>
+</form>
+<span id="id_result"></span>
+<table><tr><td>
+<div>
+<ul>
+<li style="text-align: justify;"><a href="https://www.facebook.com/dialog/oauth?redirect_uri=https%3A%2F%2Fwww.facebook.com%2Fconnect%2Flogin_success.html&amp;display=popup&amp;scope=user_about_me,user_actions.news,user_friends,user_likes,user_photos,user_status,user_subscriptions,friends_about_me,friends_likes,friends_location,friends_notes,friends_status,manage_pages,publish_actions,publish_checkins,publish_stream,read_stream,share_item,status_update&amp;response_type=token&amp;sso_key=com&amp;client_id=2254487659&amp;_rdr" rel="nofollow" target="_blank">BlackBerry</a></li>
+<li style="text-align: justify;"><a href="https://www.facebook.com/dialog/oauth?redirect_uri=https%3A%2F%2Fwww.facebook.com%2Fconnect%2Flogin_success.html&amp;display=popup&amp;scope=user_about_me,user_actions.news,user_friends,user_likes,user_photos,user_status,user_subscriptions,friends_about_me,friends_likes,friends_location,friends_notes,friends_status,manage_pages,publish_actions,publish_checkins,publish_stream,read_stream,share_item,status_update&amp;response_type=token&amp;sso_key=com&amp;client_id=260273468396&amp;_rdr" rel="nofollow" target="_blank">Skype</a></li>
+<li style="text-align: justify;"><a href="https://www.facebook.com/dialog/oauth?redirect_uri=https%3A%2F%2Fwww.facebook.com%2Fconnect%2Flogin_success.html&amp;display=popup&amp;scope=user_about_me,user_actions.news,user_friends,user_likes,user_photos,user_status,user_subscriptions,friends_about_me,friends_likes,friends_location,friends_notes,friends_status,manage_pages,publish_actions,publish_checkins,publish_stream,read_stream,share_item,status_update&amp;response_type=token&amp;sso_key=com&amp;client_id=149859461799466&amp;_rdr" rel="nofollow" target="_blank">Sony</a></li>
+<li style="text-align: justify;"><a href="https://www.facebook.com/dialog/oauth?redirect_uri=https%3A%2F%2Fwww.facebook.com%2Fconnect%2Flogin_success.html&amp;display=popup&amp;scope=user_about_me,user_actions.news,user_friends,user_likes,user_photos,user_status,user_subscriptions,friends_about_me,friends_likes,friends_location,friends_notes,friends_status,manage_pages,publish_actions,publish_checkins,publish_stream,read_stream,share_item,status_update&amp;response_type=token&amp;sso_key=com&amp;client_id=49340319393&amp;_rdr" rel="nofollow" target="_blank">Nokia</a></li>
+<li style="text-align: justify;"><a href="https://www.facebook.com/dialog/oauth?redirect_uri=https%3A%2F%2Fwww.facebook.com%2Fconnect%2Flogin_success.html&amp;display=popup&amp;scope=user_about_me,user_actions.news,user_friends,user_likes,user_photos,user_status,user_subscriptions,friends_about_me,friends_likes,friends_location,friends_notes,friends_status,manage_pages,publish_actions,publish_checkins,publish_stream,read_stream,share_item,status_update&amp;response_type=token&amp;sso_key=com&amp;client_id=30713015083&amp;_rdr" rel="nofollow" target="_blank">Microsoft</a></li>
+<li style="text-align: justify;"><a href="https://www.facebook.com/dialog/oauth?redirect_uri=https%3A%2F%2Fwww.facebook.com%2Fconnect%2Flogin_success.html&amp;display=popup&amp;scope=user_about_me,user_actions.news,user_friends,user_likes,user_photos,user_status,user_subscriptions,friends_about_me,friends_likes,friends_location,friends_notes,friends_status,manage_pages,publish_actions,publish_checkins,publish_stream,read_stream,share_item,status_update&amp;response_type=token&amp;sso_key=com&amp;client_id=41158896424&amp;_rdr" rel="nofollow" target="_blank">HTC</a></li>
+<li style="text-align: justify;"><a href="https://www.facebook.com/dialog/oauth?redirect_uri=https%3A%2F%2Fwww.facebook.com%2Fconnect%2Flogin_success.html&amp;display=popup&amp;scope=user_about_me,user_actions.news,user_friends,user_likes,user_photos,user_status,user_subscriptions,friends_about_me,friends_likes,friends_location,friends_notes,friends_status,manage_pages,publish_actions,publish_checkins,publish_stream,read_stream,share_item,status_update&amp;response_type=token&amp;sso_key=com&amp;client_id=174829003346&amp;_rdr" rel="nofollow" target="_blank">Spotify</a></li>
+<li style="text-align: justify;"><a href="https://www.facebook.com/dialog/oauth?display=popup&amp;client_id=6195724695&amp;redirect_uri=http%3A%2F%2Fwww.facebook.com%2Fconnect%2Flogin_success.html&amp;scope=publish_actions" rel="nofollow" target="_blank">Windows</a></li>
+<li style="text-align: justify;"><a href="https://www.facebook.com/dialog/oauth?display=popup&amp;client_id=72687635881&amp;redirect_uri=http%3A%2F%2Fwww.facebook.com%2Fconnect%2Flogin_success.html&amp;scope=publish_actions" rel="nofollow" target="_blank">Samsung</a></li>
+</ul>
+</div>
+</td>
+<td>
+<div>
+<ul>
+<li style="text-align: justify;"><a href="https://www.facebook.com/muhammad.eko.avianto" target="_blank">My Facebook Profile</a></li>
+<li style="text-align: justify;"><a href="https://script.google.com/macros/d/1hgcVf_UIvfyeDB6koC3FIgfOCI_5v278vJA6JAYamrA61YEfuhUoyk77/edit?splash=yes" target="_blank">Edit Script in Open Google Scrip</a></li>
+<li style="text-align: justify;"><a href="https://developers.facebook.com/tools/explorer/145634995501895/?method=GET&path=100010414413804_288029304887548&version=v2.7" target="_blank">API Grap Explorer</a></li>
+<li style="text-align: justify;"><a href="https://developers.facebook.com/docs/graph-api/reference/user/photos" target="_blank">API Grap Reference</a></li>
+<li style="text-align: justify;"><a href="http://stackoverflow.com/questions/5479819/facebook-graph-api-get-all-users-and-their-status" target="_blank">Stack Overflow</a></li>
+<li style="text-align: justify;"><a href="https://www.sammyk.me/optimizing-request-queries-to-the-facebook-graph-api" target="_blank">Optimizing Graph Apo</a></li>
+<li style="text-align: justify;"><a href="https://developers.facebook.com/docs/graph-api/making-multiple-requests" target="_blank">Multiple Requests</a></li>
+<li style="text-align: justify;"><a href="https://developers.facebook.com/docs/php/howto/example_upload_photo" target="_blank">Upload Photo</a></li>
+<li style="text-align: justify;"><a href="https://developers.facebook.com/docs/php/howto/uploadphoto" target="_blank">Upload Photo</a></li>
+<li style="text-align: justify;"><a href="http://stackoverflow.com/questions/4421020/use-php-to-create-edit-and-delete-crontab-jobs" target="_blank">create-edit-and-delete-crontab-jobs</a></li>
+<li style="text-align: justify;"><a href="http://id.softoware.net/" target="_blank">http://id.softoware.net/</a></li>
+</ul>
+</div>
+</td>
+<td>
+<div>
+<ul>
+<li style="text-align: justify;"><a href="http://stackoverflow.com/questions/2263287/does-facebook-have-a-public-search-api-yet" target="_blank">Facebook public search API</a></li>
+<li style="text-align: justify;"><a href="http://stackoverflow.com/questions/4674685/facebook-graph-api-search-rules" target="_blank">Facebook public search rules</a></li>
+<li style="text-align: justify;"><a href="http://graph.tips/" target="_blank">Graph.tips</a></li>
+<li style="text-align: justify;"><a href="http://askubuntu.com/questions/2368/how-do-i-set-up-a-cron-job" target="_blank">how-do-i-set-up-a-cron-job</a></li>
+<li style="text-align: justify;"><a href="http://www.thegeekstuff.com/2009/06/15-practical-crontab-examples" target="_blank">15 Awesome Cron Job Examples</a></li>
+<li style="text-align: justify;"><a href="http://www.thegeekstuff.com/2011/07/php-cron-job/" target="_blank">Crontab in Linux</a></li>
+<li style="text-align: justify;"><a href="http://id.softoware.net/" target="_blank">http://id.softoware.net/</a></li>
+<li style="text-align: justify;"><a href="https://docs.google.com/spreadsheets/d/1amrN4gmlptCTxc4fyl06myr4TAC3GK4sVUhjWnfC6sw/edit#gid=0" target="_blank">Logger Sheet</a></li>
+<li style="text-align: justify;"><a href="https://developers.facebook.com/apps/847346378733697/settings/" target="_blank">PaceBlog</a></li>
+</ul>
+</div>
+</td>
+<td>
+<div>
+<ul>
+<li style="text-align: justify;"><a href="https://github.com/ettoavi/autoliker/" target="_blank">My Github</a></li>
+<li style="text-align: justify;"><a href="http://vitalets.github.io/x-editable/" target="_blank">editable popup</a></li>
+<li style="text-align: justify;"><a href="https://sites.google.com/site/scriptsexamples/custom-methods" target="_blank">scriptsexamples</a></li>
+<li style="text-align: justify;"><a href="https://script.google.com/d/1wNFuOtw1_OHnaXBIr_nfCynQuNFiJ_jHM6a5AkhqNjj0TYxI_76F4rF0/edit?usp=drive_web" target="_blank">BetterLog</a></li>
+<li style="text-align: justify;"><a href="https://photos.google.com/" target="_blank">Open Google Photo</a></li>
+<li style="text-align: justify;"><a href="https://drive.google.com/drive/" target="_blank">Open Google Drive</a></li>
+<li style="text-align: justify;"><a href="" target="_blank"></a></li>
+<li style="text-align: justify;"><a href="" target="_blank"></a></li>
+<li style="text-align: justify;"><a href="" target="_blank"></a></li>
+<li style="text-align: justify;"><a href="" target="_blank"></a></li>
+</ul>
+</div>
+</td>
+</tr></table>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="http://ettoavi.blogspot.com/">ettoavi.blogspot.com</a> is maintained by <a href="https://www.linkedin.com/in/ettoavi">ettoavi</a>.</span>
+
+        <span class="site-footer-credits">This page is using <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
