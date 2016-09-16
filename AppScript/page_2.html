@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ettoavi-js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<style>
+<?!= includeCss('normalize.html'); ?>
+<?!= includeCss('stylesheet.html'); ?>
+<?!= includeCss('github-light.html'); ?>
+
+</style>    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+var count = 0;
+var suspended = false;
+<?!= includeCss('button_script_js'); ?>
+
+function is_suspended(cmsg) { if (!suspended) return true;
+  if (suspended) {
+      $('#id_message').html(cmsg);
+      obj_message = setInterval(function(){
+           clearInterval(obj_message);$('#id_message').html('');suspended = false;
+           $("#bt_delayed_post").html('Post it');
+      }, 9000);
+      return true;
+  }
+  return false;
+}
+
+
+function getListHandler(params) {
+        $("#hist_list").html(params.text);
+        $("#id_autolike").html((params.autolike?'':'de')+'activated');
+        $("#id_schedule").html( params.schedule );
+}
+
+function gePostHandler(params) {
+        suspended = true;
+        $("#hist_list").html(params.text);
+        $("#id_schedule").html( params.schedule );
+        is_suspended('wait..');
+}
+
+function set_timer() { //return;
+        objTimer = setInterval(function(){ 
+                if (suspended) return;
+                $('#bt_history').html('Try it('+count+')');
+                if(++count > 500) {count = 0;}
+                google.script.run.withSuccessHandler(getListHandler).getDelayedList();
+        }, 9000);
+}
+
+$(document).ready(function(){
+     google.script.run.withSuccessHandler(getUrlHandler).getAppUrl();
+     google.script.run.withSuccessHandler(getListHandler).getDelayedList();
+     $("#bt_history").click(function(){
+        $("#hist_list").html('Fetching Data From network...');
+        google.script.run.withSuccessHandler(getListHandler).getDelayedList();
+     });
+     $("#bt_delayed_post").click(function(){
+        if (suspended) return;
+        suspended = true;
+        $("#bt_delayed_post").html('Run..');
+        google.script.run.withSuccessHandler(gePostHandler).postDelayedList();
+     });
+     
+     set_timer();
+});
+function doPostSuccess (obj) {
+        $("#ST"+obj.user_id+"").html(obj.message).css("color","red");
+        google.script.run.withSuccessHandler(getListHandler).getDelayedList();
+}
+function doPost(id){
+        $("#"+id+"").html("Removing");
+        google.script.run.withSuccessHandler(doPostSuccess).doPostRemoveData(id);
+}
+
+function RemoveFromList(id){
+        $("#ST"+id+"").html("Removing");
+        google.script.run.withSuccessHandler(doPostSuccess).doRemoveFromDelayedList(id);
+}
+
+
+</script>
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name" id="id_schedule">Memuat Data..</h1>
+      Autolike & Auto Commenter Daemon <span id="id_autolike"></span><span id="id_message" style="font-size:12px;"></span>
+      <h2 class="project-tagline"></h2> 
+		<button id="bt_history" class="btn">Get Delayed List</button>
+        <button id="bt_delayed_post" class="btn">Post it!</button>
+         <a id="nxt_page" href="" target="_top" class="btn">Next Page</a>
+    </section>
+
+    <section class="main-content">
+      <h3><?!= includeCss('button_template.html'); ?>
+<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Selamat datang sahabatku yang di Rahmati Allah</h3>
+
+
+<span id="hist_list">Ini adalah halaman host untuk javascript halaman blog saya, sekaligus repositori dimana semua "open source code" saya publikasikan dengan gratis, Jika anda kesulitan silahkan hubungi facebook saya pada link ini <a href="https://www.facebook.com/muhammad.eko.avianto">Muhammad Eko Avianto</a>.
+Program yang saya kembangkan sebahagian adalah milik saya sendiri, sebahagian modifikasi penyesuaian, sedangkan sisanya karya cipta pihak lain</span>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="http://ettoavi.blogspot.com/">ettoavi.blogspot.com</a> is maintained by <a href="https://www.linkedin.com/in/ettoavi">ettoavi</a>.</span>
+
+        <span class="site-footer-credits">This page is using <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
