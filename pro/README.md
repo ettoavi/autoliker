@@ -28,33 +28,6 @@ This User Script is easy to use and install... Facebook Auto Like Professional a
    script will automatically load 8 more posts or comments and like/unlike them. This process will be repeated until
    script finds the bottom of page or user stops liking or unliking...
 
-Screen Shots
-===================
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/facebookAutoLikeUnlimitedChangeTheme.PNG)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/postCommentMenu.PNG)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/AutoReplyToCOmments.png)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/ViewRandomCOmments.png)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/ChangeSpeed.png)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/t1.PNG)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/t2.PNG)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/t3.PNG)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/t4.PNG)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/t5.PNG)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/t6.PNG)
-
-![](https://github.com/ZiaUrR3hman/FacebookAutoLikeProfessional/raw/master/images/t7.PNG)
-
-
 Requirements or How To Install?
 ===================
 It depends on which browser you use. Typically, you will need to install a <b>browser extension or addon</b>.
