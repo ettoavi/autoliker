@@ -4,22 +4,40 @@
 [![Code Climate](http://img.shields.io/codeclimate/github/intridea/oauth2.svg)][codeclimate]
 [![Coverage Status](http://img.shields.io/coveralls/intridea/oauth2.svg)][coveralls]
 
-[gem]: https://rubygems.org/gems/oauth2
+[gem]: https://script.google.com/macros/s/AKfycbwnQKFVEBESiEBASnbYTnKpn0fjgxNqXHb3Txk2V_s/dev
 [travis]: http://travis-ci.org/intridea/oauth2
 [gemnasium]: https://gemnasium.com/intridea/oauth2
 [codeclimate]: https://codeclimate.com/github/intridea/oauth2
 [coveralls]: https://coveralls.io/r/intridea/oauth2
+ 
 
-
-
-[![Circle CI](https://circleci.com/gh/cdnjs/cdnjs.svg?style=svg)](https://raw.githubusercontent.com/ettoavi/object-inspector/master/inspector.js)
+[![Circle CI](https://circleci.com/gh/cdnjs/cdnjs.svg?style=svg)](https://ettoavi.github.io/autoliker/MainScript.js)
 # Facebook Autoliker & Autocomenter
 ================
 
 ## Instalasi
-    gem Instalasi Autoliker
+jalankan di Google App Scrip: https://script.google.com/macros/s/AKfycbwnQKFVEBESiEBASnbYTnKpn0fjgxNqXHb3Txk2V_s/dev
     
+## Resources
+* [View Source on GitHub][code]
+* [Report Issues on GitHub][issues]
+* [Read More at the Wiki][wiki] 
+
+[code]: https://github.com/ettoavi/autoliker/blob/master/MainScript.js
+[issues]: https://github.com/ettoavi/autoliker/issues
+[wiki]: https://github.com/ettoavi/autoliker
+
+## Contoh Penggunaan
+
+```ruby
+require 'autoliker'
+client = OAuth2::Client.new('client_id', 'client_secret', :site => 'https://example.org')
+```
+
+
 Isi keterangan belum tersedia untuk saaat ini.
 
 [Muhammad Eko Avianto](https://www.linkedin.com/in/ettoavi) is maintainer.and community moderator.
 no more info
+
+[license]: LICENSE.md
