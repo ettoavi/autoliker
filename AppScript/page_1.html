@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ettoavi-js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<style>
+<?!= includeCss('normalize.html'); ?>
+<?!= includeCss('stylesheet.html'); ?>
+<?!= includeCss('github-light.html'); ?>
+
+</style>    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+var count = 0;
+<?!= includeCss('button_script_js'); ?>
+
+function getListHandler(params) {
+        $("#hist_list").html(params.text);
+        $('#bt_history').html('Read it!(0)');
+        suspended = false;
+}
+
+function set_timer() { return;
+  objTimer = setInterval(function(){ 
+        if (suspended) return;
+        $('#bt_history').html('Read it!('+count+')');
+        if(++count > 500) {count = 0;}
+        google.script.run.withSuccessHandler(getListHandler).getHistoryList();
+   }, 12000);
+}
+
+$(document).ready(function(){
+     google.script.run.withSuccessHandler(getUrlHandler).getAppUrl();
+     google.script.run.withSuccessHandler(getListHandler).getHistoryList();
+     $("#bt_history").click(function(){
+         if (suspended) return;
+         suspended = true;
+         $("#bt_history").html('Running...');
+         google.script.run.withSuccessHandler(getListHandler).getHistoryList();
+     });
+     set_timer();
+});
+function doPostSuccess (obj) {
+ function delayed_acces(){
+   $("#"+obj.user_id+"").html(obj.message);
+   var timer_id = setInterval(function(){
+        clearInterval(timer_id);
+        google.script.run.withSuccessHandler(getListHandler).getHistoryList();
+   }, 2000);
+ }   
+
+    if (!obj.result) {
+       delayed_acces();
+    } else {
+       google.script.run.withSuccessHandler(getListHandler).getHistoryList();
+    }
+}
+
+function objAsTable(theObj,nlevel) {
+    function doReadIt(theObj,nlevel) {
+        var result  = '';
+        var ctype = typeof(theObj);
+        if ( ctype == 'string' || ctype == 'number') return {result:theObj,index:'text'}
+        if ( ctype == 'boolean' ) return {result:(theObj?'true':'false'),index:'text'} 
+        if (typeof(nlevel) != 'number') nlevel = 0;
+        var astyle=[];var count = 0;
+        var baseleft = 'margin:0;height:20px;padding:0px 5px 0px 25px;background-color: #f5f5f5;';
+        var baseright = 'margin:0;height:20px;padding:0px 5px 0px 0px;background-color: #fcfcfc;';
+        var baseText = 'margin:0;height:20px;padding:0px 5px 0px 25px;background-color: #fcfcfc;';
+        for (var info in theObj) {
+            astyle[count]={
+              left:'style="'+baseleft+'"',
+              right:'style="'+baseright+'"',
+              text:'style="'+baseText+'"'
+            }; count++;
+        }
+        if (count > 0 && nlevel > 0) {
+            astyle[0].left = 'style="border-top: 0px;border-bottom: 1px solid #dce6f0;'+baseleft+'"';
+            astyle[0].right = 'style="border-top: 0px;border-bottom: 1px solid #dce6f0;'+baseright+'"';
+            astyle[astyle.length-1].left = 'style="border-top: 0px;border-bottom: 0px;'+baseleft+'"';
+            astyle[astyle.length-1].right = 'style="border-top: 0px;border-bottom: 0px;'+baseright+'"';
+            astyle[astyle.length-1].text = 'style="border-top: 0px;border-bottom: 0px;'+baseText+'"';
+        }
+        count = 0;
+        for (var info in theObj) {
+            var nest = doReadIt(theObj[info],(nlevel+1)); 
+            result  += '<tr><td '+astyle[count].left+'>'+info+'</td><td '
+                    +  astyle[count][nest.index]+'>'
+                    +  nest.result +'</td></tr>';
+                 count++;
+        }
+        return {result:'<table style="margin:0;">'+result+'</table>',index:'right'};
+    }
+    return doReadIt(theObj,nlevel).result;
+}
+
+function doPost(id){
+     $("#"+id+"").html("Removing");
+     google.script.run.withSuccessHandler(doPostSuccess).doPostRemoveData(id);
+}
+
+function InplaceHandler(param){
+$("#"+param.line_id+"").html("<td colspan=3>"+
+objAsTable( param.result ) + 
+'</td>');
+/*
+     var sid = param.status_id;
+     $("#usr_text"+sid).val(param.result.message);
+     $("#imessage"+sid).html('in place edit');
+     $("#ifrom_id"+sid).html(param.result.from.id);
+     $("#ifrom_nm"+sid).html(param.result.from.name);
+     */
+}
+
+function doPostInplaceEdit(id,status_id){
+     $("#"+id).html( '<td colspan=2>'+ $( "#usr_text"+status_id).val() + '</td><td></td>');
+     //google.script.run.withSuccessHandler(doPostSuccess).doPostRemoveData(id);
+}
+
+   function postTofb(line_id,status_id) {
+        var uname = $('#ifrom_nm'+status_id).html();
+        alert(uname);
+        var postData = {
+          message: uname +" wrote :\n\n\n"+ $('#usr_text'+status_id).val(),
+          message_tags: [{
+          id: $('#ifrom_id'+status_id).html(), 
+          name: uname,
+          type: "user",
+          offset: 0,
+          length: uname.length
+           }]          
+        }
+        $("#"+line_id).html("<td colspan=3>"+objAsTable(postData)+'</td>');
+        //return;
+        var api = 'https://graph.facebook.com/me/feed?method=post&'+access_token;
+        $.ajax({
+                type: 'POST',
+                url: api,
+                data: postData,    //$('#usrform'+status_id).serialize(),
+                success: function(data){
+                  alert(JSON.stringify(data));
+                },
+                dataType: 'jsonp'
+        });
+    }
+
+function inplaceEdit(status_id,line_id){
+   var chk ={}
+
+  function openfb(fields,fn) {
+        var api = 'https://graph.facebook.com/'+status_id+'?fields='+fields +'&'+access_token;
+        $.ajax({
+                type: 'GET',
+                url: api,
+                data: 'testing',    //$('#usrform'+status_id).serialize(),
+                success: function(data){
+                  fn(data);
+                },
+                dataType: 'jsonp'
+        });
+    }
+
+    function handleIt(data,pictured){
+    var im_a = '<img src="' + (pictured?data.full_picture:'');
+    var im_b = '" height="450" width="570">';
+    var params = {status_id:status_id,line_id:line_id};
+    typeof(data.message)=='undefined'?data.message='':true;
+    typeof(data.from)=='undefined'?data.from={id:'lewat',name:'blom tau'}:true;
+    //$("#"+line_id).html("<td colspan=3>"+objAsTable(data)+'</td>');
+    //return; 
+     $("#"+line_id).html("<td colspan=2>"+
+     '<div><form action="#" id="usrform'+status_id+'">'+
+     '<textarea id="usr_text'+status_id+'" style="width:100%;height:50em;" rows="4" cols="50" name="comment" form="usrform">'+
+     data.message +'</textarea>'+
+     (pictured?im_a+im_b:'') +
+     '</form></div></td><td>'+
+     '<span id="imessage'+status_id+'">Inplace Edit..</span><br/>'+
+     '<span id="ifrom_id'+status_id+'">'+data.from.id+'</span><br/>'+
+     '<span id="ifrom_nm'+status_id+'">'+data.from.name+'</span><br/>'+     
+     '<button onClick="doPostInplaceEdit(\''+line_id+'\',\''+status_id+'\')">Ok</button><button>Cancel</button>' +
+     '<button onClick="postTofb( \''+line_id+'\',\''+status_id+'\' )">Copas</button>' +
+     "</td>");
+     //google.script.run.withSuccessHandler(InplaceHandler).getDataByStatusId(status_id,line_id);
+
+    }    
+    
+    openfb('id,type',function(p){
+        switch (p.type) {
+            case 'photo':
+                openfb('id,from,message,type,full_picture',function(p){
+                    handleIt(p,true);
+                });
+                break;
+            default:
+                openfb('id,from,message,type',function(p){
+                    handleIt(p,false);
+                });
+                break;
+        }
+    
+    });
+    
+return;
+
+}
+
+
+</script>
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">History List Status</h1>
+      Autolike & Auto Commenter Daemon <span id="id_autolike"></span><span id="id_message" style="font-size:12px;"></span>
+      <h2 class="project-tagline"></h2> 
+		<button id="bt_history" class="btn">Read it!(0)</button>
+        <button id="bt_delayed_post" class="btn">------</button>
+         <a id="nxt_page" href="" target="_top" class="btn">Next Page</a>
+    </section>
+
+    <section class="main-content">
+      <h3><?!= includeCss('button_template.html'); ?>
+<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Selamat datang sahabatku yang di Rahmati Allah</h3>
+
+
+<p id="hist_list">Ini adalah halaman host untuk javascript halaman blog saya, sekaligus repositori dimana semua "open source code" saya publikasikan dengan gratis, Jika anda kesulitan silahkan hubungi facebook saya pada link ini <a href="https://www.facebook.com/muhammad.eko.avianto">Muhammad Eko Avianto</a>.
+Program yang saya kembangkan sebahagian adalah milik saya sendiri, sebahagian modifikasi penyesuaian, sedangkan sisanya karya cipta pihak lain</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="http://ettoavi.blogspot.com/">ettoavi.blogspot.com</a> is maintained by <a href="https://www.linkedin.com/in/ettoavi">ettoavi</a>.</span>
+
+        <span class="site-footer-credits">This page is using <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
