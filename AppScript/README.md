@@ -1,3 +1,5 @@
+![Circle CI](https://ettoavi.github.io/autoliker/AppScript/images/google-app-script.jpg)
+
 [![Gem Version](http://img.shields.io/gem/v/oauth2.svg)][gem]
 [![Build Status](http://img.shields.io/travis/intridea/oauth2.svg)][travis]
 [![Dependency Status](http://img.shields.io/gemnasium/intridea/oauth2.svg)][gemnasium]
@@ -12,10 +14,15 @@
  
 
 [![Circle CI](https://circleci.com/gh/cdnjs/cdnjs.svg?style=svg)](https://ettoavi.github.io/autoliker/MainScript.js)
+
+
 # Using Google App Script
 ================
 
 ## Instalasi
+Copy seluruh program ke `App Script`. Anda bisa memulainya dengan di google start dengan mengklik [disini](https://www.google.com/script/start/) kemudian klik Sart Scripting
+
+
 jalankan di Google App Scrip: https://script.google.com/macros/s/AKfycbwnQKFVEBESiEBASnbYTnKpn0fjgxNqXHb3Txk2V_s/dev
     
 ## Resources
