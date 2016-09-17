@@ -22,7 +22,7 @@
 ## Instalasi
 ---
 1.Buat App dengan di google start dengan mengklik [disini](https://www.google.com/script/start/) kemudian klik Sart Scripting
-Copy seluruh program ke `App Script` sesuai dengan nama file masing-masing.
+Copy seluruh program ke `App Script` sesuai dengan nama file masing-masing.<br/>
 2. Buat token akses facebook 
 
 jalankan di Google App Scrip: https://script.google.com/macros/s/AKfycbwnQKFVEBESiEBASnbYTnKpn0fjgxNqXHb3Txk2V_s/dev
