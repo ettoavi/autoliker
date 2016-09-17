@@ -20,11 +20,13 @@
 ================
 
 ## Instalasi
+---
 Copy seluruh program ke `App Script`. Anda bisa memulainya dengan di google start dengan mengklik [disini](https://www.google.com/script/start/) kemudian klik Sart Scripting
 
 
 jalankan di Google App Scrip: https://script.google.com/macros/s/AKfycbwnQKFVEBESiEBASnbYTnKpn0fjgxNqXHb3Txk2V_s/dev
-    
+---
+
 ## Resources
 * [View Source on GitHub][code]
 * [Report Issues on GitHub][issues]
