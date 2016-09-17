@@ -35,7 +35,7 @@ client = OAuth2::Client.new('client_id', 'client_secret', :site => 'https://exam
 ```
 
 
-Isi keterangan belum tersedia untuk saaat ini.
+Isi keterangan belum tersedia untuk saaat ini.<br/>
 [Sample](https://www.linkedin.com/in/ettoavi) is maintainer.and community moderator.
 
 [Muhammad Eko Avianto](https://ettoavi.github.io/autoliker/web/test.html)
