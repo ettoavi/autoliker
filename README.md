@@ -3,6 +3,7 @@
 [![Dependency Status](http://img.shields.io/gemnasium/intridea/oauth2.svg)][gemnasium]
 [![Code Climate](http://img.shields.io/codeclimate/github/intridea/oauth2.svg)][codeclimate]
 [![Coverage Status](http://img.shields.io/coveralls/intridea/oauth2.svg)][coveralls]
+[![Stories in Ready](https://badge.waffle.io/ettoavi/autoliker.svg?label=ready&title=Ready)](http://waffle.io/ettoavi/autoliker)
 
 [gem]: https://script.google.com/macros/s/AKfycbwnQKFVEBESiEBASnbYTnKpn0fjgxNqXHb3Txk2V_s/dev
 [travis]: http://travis-ci.org/intridea/oauth2
@@ -10,6 +11,8 @@
 [codeclimate]: https://codeclimate.com/github/intridea/oauth2
 [coveralls]: https://coveralls.io/r/intridea/oauth2
  
+ 
+
 
 [![Circle CI](https://circleci.com/gh/cdnjs/cdnjs.svg?style=svg)](https://ettoavi.github.io/autoliker/MainScript.js)
 # Facebook Autoliker & Autocomenter
