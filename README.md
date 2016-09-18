@@ -15,6 +15,8 @@
 # Facebook Autoliker & Autocomenter
 ================
 
+[![Throughput Graph](https://graphs.waffle.io/ettoavi/autoliker/throughput.svg)](https://waffle.io/ettoavi/autoliker/metrics/throughput)
+
 ## Instalasi
 jalankan di Google App Scrip: https://script.google.com/macros/s/AKfycbwnQKFVEBESiEBASnbYTnKpn0fjgxNqXHb3Txk2V_s/dev
     
